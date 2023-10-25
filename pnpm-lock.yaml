@@ -19,6 +19,9 @@ dependencies:
   lucide-react:
     specifier: ^0.288.0
     version: 0.288.0(react@18.2.0)
+  primeicons:
+    specifier: ^6.0.1
+    version: 6.0.1
   primereact:
     specifier: ^10.0.5
     version: 10.0.5(@types/react@18.2.15)(react-dom@18.2.0)(react@18.2.0)
@@ -1815,6 +1818,10 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
     dev: true
+
+  /primeicons@6.0.1:
+    resolution: {integrity: sha512-KDeO94CbWI4pKsPnYpA1FPjo79EsY9I+M8ywoPBSf9XMXoe/0crjbUK7jcQEDHuc0ZMRIZsxH3TYLv4TUtHmAA==}
+    dev: false
 
   /primereact@10.0.5(@types/react@18.2.15)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-F7BNo5EYGp5035iAWX7Sb/xqwVN2qaId3BpplponlIbY+ODTmRwx/6hxmH8BgTlcoDq8bajA52/mWgF30b1rsQ==}

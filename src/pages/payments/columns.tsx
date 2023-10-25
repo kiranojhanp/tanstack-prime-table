@@ -1,5 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import type { Payment } from "@/data";
+import { ActionsMenu } from "@/components/datatable/actions";
 
 export const columns: ColumnDef<Payment>[] = [
   {
@@ -26,7 +27,15 @@ export const columns: ColumnDef<Payment>[] = [
   {
     id: "actions",
     cell: () => {
-      return <span>Actions</span>;
+      return (
+        <>
+          <ActionsMenu
+            onView={() => {}}
+            onEdit={() => {}}
+            onDelete={() => {}}
+          />
+        </>
+      );
     },
   },
 ];
