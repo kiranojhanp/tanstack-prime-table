@@ -2,6 +2,10 @@ body {
   font-family: var(--font-family);
 }
 
+.p-datatable-wrapper {
+  overflow-x: scroll;
+}
+
 .p-datatable-table {
   width: 100%;
 }

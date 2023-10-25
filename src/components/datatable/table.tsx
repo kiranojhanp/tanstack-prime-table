@@ -37,17 +37,20 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   globalFilterPlaceholder?: string;
+  size?: "small" | "normal" | "large";
 }
 
 // Multi size datatable
-// Dropdown component based on primereact using prime react classes
+// Dropdown using primereact
 // Custom paginator based on primereact paginator component
+// Dropdown component based on primereact using prime react classes
 
 const DataTable = <TData extends { id: string | number }, TValue>({
   className,
   columns,
   data,
   globalFilterPlaceholder,
+  size = "normal",
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -73,7 +76,7 @@ const DataTable = <TData extends { id: string | number }, TValue>({
     },
   });
   return (
-    <Card>
+    <div className="card">
       <div
         className={`p-datatable p-component p-datatable-responsive-scroll ${className}`}
       >
@@ -190,7 +193,7 @@ const DataTable = <TData extends { id: string | number }, TValue>({
           </Button>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 
