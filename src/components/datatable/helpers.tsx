@@ -1,4 +1,41 @@
+import clsx from "clsx";
+import { InputText } from "primereact/inputtext";
 import * as React from "react";
+import type { SizeType } from "./table";
+
+const TableToolbar = ({
+  handleGlobalSearch,
+  globalFilterPlaceholder,
+  size,
+  value,
+}: {
+  handleGlobalSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  globalFilterPlaceholder?: string;
+  size?: SizeType;
+  value?: string;
+}) => {
+  const inputClasses = React.useMemo(() => {
+    return clsx({
+      "p-inputtext-sm": size === "small",
+      "": size === "normal",
+      "p-inputtext-lg ": size === "large",
+    });
+  }, [size]);
+
+  return (
+    <div className="p-datatable-header">
+      <span className="p-input-icon-left">
+        <i className="pi pi-search" />
+        <InputText
+          className={`${inputClasses}`}
+          placeholder={globalFilterPlaceholder ?? "Keyword Search"}
+          value={value ?? ""}
+          onChange={(event) => handleGlobalSearch(event)}
+        />
+      </span>
+    </div>
+  );
+};
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -13,13 +50,17 @@ Table.displayName = "Table";
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
->(({ ...props }, ref) => <thead ref={ref} {...props} />);
+>(({ className, ...props }, ref) => (
+  <thead className={className ?? "p-datatable-thead"} ref={ref} {...props} />
+));
 TableHeader.displayName = "TableHeader";
 
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
->(({ ...props }, ref) => <tbody ref={ref} {...props} />);
+>(({ className, ...props }, ref) => (
+  <tbody className={className ?? "p-datatable-tbody"} ref={ref} {...props} />
+));
 TableBody.displayName = "TableBody";
 
 const TableFooter = React.forwardRef<
@@ -61,4 +102,5 @@ export {
   TableRow,
   TableCell,
   TableCaption,
+  TableToolbar,
 };

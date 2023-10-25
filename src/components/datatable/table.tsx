@@ -18,20 +18,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableToolbar,
 } from "@/components/datatable/helpers";
 
 import { Button } from "../ui/button";
-import { useMemo, useState } from "react";
-import { InputText } from "primereact/inputtext";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 
 import clsx from "clsx";
 
+export type SizeType = "small" | "normal" | "large";
 interface DataTableProps<TData, TValue> {
   className: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   globalFilterPlaceholder?: string;
-  size?: "small" | "normal" | "large";
+  size?: SizeType;
 }
 
 // Dropdown using primereact
@@ -69,6 +70,13 @@ const DataTable = <TData extends { id: string | number }, TValue>({
     },
   });
 
+  const handleGlobalSearch = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      table.getColumn("email")?.setFilterValue(event.target.value);
+    },
+    [table]
+  );
+
   const tableClasses = useMemo(() => {
     return clsx({
       "p-datatable p-component p-datatable-responsive-scroll": true,
@@ -78,35 +86,19 @@ const DataTable = <TData extends { id: string | number }, TValue>({
     });
   }, [size]);
 
-  const inputClasses = useMemo(() => {
-    return clsx({
-      "p-inputtext-sm": size === "small",
-      "": size === "normal",
-      "p-inputtext-lg ": size === "large",
-    });
-  }, [size]);
-
   return (
     <div className="card">
       <div className={`${tableClasses} ${className}`}>
-        <div className="p-datatable-header">
-          <span className="p-input-icon-left">
-            <i className="pi pi-search" />
-            <InputText
-              className={`${inputClasses}`}
-              placeholder={globalFilterPlaceholder ?? "Keyword Search"}
-              value={
-                (table.getColumn("email")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("email")?.setFilterValue(event.target.value)
-              }
-            />
-          </span>
-        </div>
-
+        <TableToolbar
+          {...{
+            handleGlobalSearch,
+            globalFilterPlaceholder,
+            size,
+            value: table.getColumn("email")?.getFilterValue() as string,
+          }}
+        />
         <Table>
-          <TableHeader className="p-datatable-thead">
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -124,7 +116,7 @@ const DataTable = <TData extends { id: string | number }, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody className="p-datatable-tbody">
+          <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
