@@ -9,6 +9,7 @@ import {
   ColumnFiltersState,
   getFilteredRowModel,
   VisibilityState,
+  PaginationState,
 } from "@tanstack/react-table";
 
 import {
@@ -21,10 +22,10 @@ import {
   TableToolbar,
 } from "@/components/datatable/helpers";
 
-import { Button } from "../ui/button";
 import { ChangeEvent, useCallback, useMemo, useState } from "react";
 
 import clsx from "clsx";
+import { Paginator } from "primereact/paginator";
 
 export type SizeType = "small" | "normal" | "large";
 interface DataTableProps<TData, TValue> {
@@ -36,8 +37,9 @@ interface DataTableProps<TData, TValue> {
 }
 
 // Dropdown using primereact
-// Custom paginator based on primereact paginator component
 // Dropdown component based on primereact using prime react classes
+const INITIAL_PAGE_INDEX = 0;
+const ROWS_PER_PAGE = [10, 20, 30];
 
 const DataTable = <TData extends { id: string | number }, TValue>({
   className,
@@ -50,23 +52,29 @@ const DataTable = <TData extends { id: string | number }, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: INITIAL_PAGE_INDEX,
+    pageSize: ROWS_PER_PAGE[0],
+  });
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
     onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
     state: {
-      sorting,
       columnFilters,
       columnVisibility,
+      pagination,
       rowSelection,
+      sorting,
     },
   });
 
@@ -148,23 +156,20 @@ const DataTable = <TData extends { id: string | number }, TValue>({
           </TableBody>
         </Table>
 
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+        <div className="p-paginator-bottom p-paginator p-component">
+          <Paginator
+            first={pagination.pageIndex * pagination.pageSize}
+            rows={pagination.pageSize}
+            totalRecords={table.getFilteredRowModel().rows?.length}
+            rowsPerPageOptions={ROWS_PER_PAGE}
+            onPageChange={(event) => {
+              const currentPageIndex = Math.ceil(event.first / event.rows);
+              setPagination({
+                pageIndex: currentPageIndex,
+                pageSize: event.rows,
+              });
+            }}
+          />
         </div>
       </div>
     </div>
