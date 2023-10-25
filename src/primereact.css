@@ -20,3 +20,8 @@ body {
   align-items: center;
   gap: 0.5rem;
 }
+
+.p-datatable .p-sortable-column {
+  cursor: pointer;
+  user-select: none;
+}
