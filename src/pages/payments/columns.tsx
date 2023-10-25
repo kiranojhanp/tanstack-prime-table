@@ -58,5 +58,7 @@ export const columns: ColumnDef<Payment>[] = [
         </>
       );
     },
+    enableSorting: false,
+    enableHiding: false,
   },
 ];
