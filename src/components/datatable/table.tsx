@@ -29,9 +29,9 @@ const DataTable = <TData extends { id: string | number }, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <div>
+    <div className="p-datatable p-component p-datatable-responsive-scroll">
       <Table>
-        <TableHeader>
+        <TableHeader className="p-datatable-thead">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -49,7 +49,7 @@ const DataTable = <TData extends { id: string | number }, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
+        <TableBody className="p-datatable-tbody">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
@@ -58,7 +58,11 @@ const DataTable = <TData extends { id: string | number }, TValue>({
                 data-id={row.original.id ?? row.id}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell
+                    key={cell.id}
+                    data-label={cell.column.id}
+                    className={cell.column.id ? `column-${cell.column.id}` : ``}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

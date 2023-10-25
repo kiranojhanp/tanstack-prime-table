@@ -1,0 +1,21 @@
+table .column-status {
+  width: 10rem;
+  min-width: 10rem;
+  max-width: 10rem;
+}
+
+table .column-email {
+  min-width: 20rem;
+}
+
+table .column-amount {
+  width: 10rem;
+  min-width: 10rem;
+  max-width: 10rem;
+}
+
+table .column-actions {
+  width: 10rem;
+  min-width: 10rem;
+  max-width: 10rem;
+}
