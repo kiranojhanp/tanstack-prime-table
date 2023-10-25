@@ -1,6 +1,6 @@
+import { DataTable } from "@/components/datatable/table";
 import { payments, type Payment } from "@/data";
 import { columns } from "./columns";
-import { DataTable } from "./data-table";
 
 function getData(): Payment[] {
   return payments;
