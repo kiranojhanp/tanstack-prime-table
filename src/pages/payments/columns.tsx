@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import type { Payment } from "@/data";
 import { ActionsMenu } from "@/components/datatable/actions";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "primereact/checkbox";
 
 export const columns: ColumnDef<Payment>[] = [
   {
@@ -9,14 +9,14 @@ export const columns: ColumnDef<Payment>[] = [
     header: ({ table }) => (
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        onChange={(value) => table.toggleAllPageRowsSelected(!!value.checked)}
         aria-label="Select all"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onChange={(value) => row.toggleSelected(!!value.checked)}
         aria-label="Select row"
       />
     ),
