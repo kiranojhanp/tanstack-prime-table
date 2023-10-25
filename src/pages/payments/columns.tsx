@@ -4,6 +4,7 @@ import { ActionsMenu } from "@/components/datatable/actions";
 import { Checkbox } from "primereact/checkbox";
 import ColumnHeader from "@/components/datatable/column-header";
 
+// TODO: logic to hide delete button when no select options in table
 export const columns: ColumnDef<Payment>[] = [
   {
     id: "select",
