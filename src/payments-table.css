@@ -15,7 +15,7 @@
 }
 
 .table-payments .column-actions {
-  width: 10rem;
-  min-width: 10rem;
-  max-width: 10rem;
+  width: 5rem;
+  min-width: 5rem;
+  max-width: 5rem;
 }

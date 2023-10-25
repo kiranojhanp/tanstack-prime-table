@@ -39,6 +39,10 @@ interface DataTableProps<TData, TValue> {
   globalFilterPlaceholder?: string;
 }
 
+// Multi size datatable
+// Dropdown component based on primereact using prime react classes
+// Custom paginator based on primereact paginator component
+
 const DataTable = <TData extends { id: string | number }, TValue>({
   className,
   columns,
@@ -48,6 +52,7 @@ const DataTable = <TData extends { id: string | number }, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -59,10 +64,12 @@ const DataTable = <TData extends { id: string | number }, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      rowSelection,
     },
   });
   return (
@@ -71,48 +78,46 @@ const DataTable = <TData extends { id: string | number }, TValue>({
         className={`p-datatable p-component p-datatable-responsive-scroll ${className}`}
       >
         <div className="p-datatable-header">
-          <div className="flex justify-end">
-            <span className="p-input-icon-left">
-              <i className="pi pi-search" />
-              <InputText
-                placeholder={globalFilterPlaceholder ?? "Keyword Search"}
-                value={
-                  (table.getColumn("email")?.getFilterValue() as string) ?? ""
-                }
-                onChange={(event) =>
-                  table.getColumn("email")?.setFilterValue(event.target.value)
-                }
-              />
-            </span>
+          <span className="p-input-icon-left">
+            <i className="pi pi-search" />
+            <InputText
+              placeholder={globalFilterPlaceholder ?? "Keyword Search"}
+              value={
+                (table.getColumn("email")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("email")?.setFilterValue(event.target.value)
+              }
+            />
+          </span>
 
-            {/* TODO: create primereact based dropdown menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Columns
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          {/* TODO: create primereact based dropdown menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <Table>
