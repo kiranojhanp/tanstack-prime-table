@@ -7,11 +7,13 @@ import { Button } from "primereact/button";
 const TableToolbar = ({
   handleGlobalSearch,
   globalFilterPlaceholder,
+  mappedSelectedRows,
   size,
   value,
 }: {
   handleGlobalSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
   globalFilterPlaceholder?: string;
+  mappedSelectedRows?: { id: string | number }[];
   size?: SizeType;
   value?: string;
 }) => {
@@ -42,8 +44,18 @@ const TableToolbar = ({
           onChange={(event) => handleGlobalSearch(event)}
         />
       </span>
-      <div className='p-datatable-header-button-group'>
-        <Button className={buttonClasses} icon="pi pi-trash" label="Delete" severity="danger" />
+      <div className="p-datatable-header-button-group">
+        <Button
+          className={buttonClasses}
+          disabled={mappedSelectedRows && mappedSelectedRows.length <= 0}
+          icon="pi pi-trash"
+          label="Delete"
+          severity="danger"
+          onClick={() => {
+            // delete data in bulk
+            console.log(mappedSelectedRows);
+          }}
+        />
         <Button className={buttonClasses} icon="pi pi-plus" label="New" />
       </div>
     </div>
@@ -91,7 +103,9 @@ TableRow.displayName = "TableRow";
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
->(({ ...props }, ref) => <th ref={ref} {...props} />);
+>(({ className, ...props }, ref) => (
+  <th className={className ?? "p-column-header-content"} ref={ref} {...props} />
+));
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<

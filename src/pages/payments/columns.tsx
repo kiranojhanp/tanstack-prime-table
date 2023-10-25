@@ -29,7 +29,26 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: ({ column }) => {
+      if (!column.getCanSort()) {
+        return <div>Email</div>;
+      }
+
+      return (
+        <div className="p-column-header-content">
+          <span className="p-column-title">Email</span>
+          <span className="p-sortable-column-icon">
+            {column.getIsSorted() === "desc" ? (
+              <i className="pi pi-sort-amount-down-alt" />
+            ) : column.getIsSorted() === "asc" ? (
+              <i className="pi pi-sort-amount-up-alt" />
+            ) : (
+              <i className="pi pi-sort-alt" />
+            )}
+          </span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "amount",

@@ -22,7 +22,13 @@ import {
   TableToolbar,
 } from "@/components/datatable/helpers";
 
-import { ChangeEvent, useCallback, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 
 import clsx from "clsx";
 import { Paginator } from "primereact/paginator";
@@ -78,6 +84,10 @@ const DataTable = <TData extends { id: string | number }, TValue>({
     },
   });
 
+  const mappedSelectedRows = table
+    .getFilteredSelectedRowModel()
+    .rows.map((row) => ({ id: row.original.id }));
+
   const handleGlobalSearch = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       table.getColumn("email")?.setFilterValue(event.target.value);
@@ -94,6 +104,16 @@ const DataTable = <TData extends { id: string | number }, TValue>({
     });
   }, [size]);
 
+  const handleSort = useCallback(
+    (event: SyntheticEvent, sortHandler?: (event: SyntheticEvent) => void) => {
+      event.stopPropagation();
+      if (sortHandler) {
+        sortHandler(event);
+      }
+    },
+    []
+  );
+
   return (
     <div className="card">
       <div className={`${tableClasses} ${className}`}>
@@ -101,6 +121,7 @@ const DataTable = <TData extends { id: string | number }, TValue>({
           {...{
             handleGlobalSearch,
             globalFilterPlaceholder,
+            mappedSelectedRows,
             size,
             value: table.getColumn("email")?.getFilterValue() as string,
           }}
@@ -109,18 +130,39 @@ const DataTable = <TData extends { id: string | number }, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map(
+                  ({ column, getContext, id, isPlaceholder }) => {
+                    const {
+                      columnDef,
+                      getCanSort,
+                      getIsSorted,
+                      getToggleSortingHandler,
+                    } = column;
+
+                    // TODO: extract to utils
+                    const tableHeadClasses = clsx({
+                      "p-sortable-column": getCanSort(),
+                      "p-highlight":
+                        getIsSorted() === "asc" || getIsSorted() === "desc",
+                    });
+
+                    return (
+                      <TableHead
+                        key={id}
+                        className={tableHeadClasses}
+                        onClick={(event) => {
+                          if (getCanSort()) {
+                            handleSort(event, getToggleSortingHandler());
+                          }
+                        }}
+                      >
+                        {isPlaceholder
+                          ? null
+                          : flexRender(columnDef.header, getContext())}
+                      </TableHead>
+                    );
+                  }
+                )}
               </TableRow>
             ))}
           </TableHeader>
