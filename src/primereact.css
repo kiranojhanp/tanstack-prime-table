@@ -14,3 +14,9 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
+.p-datatable-header-button-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

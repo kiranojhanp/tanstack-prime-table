@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { InputText } from "primereact/inputtext";
 import * as React from "react";
 import type { SizeType } from "./table";
+import { Button } from "primereact/button";
 
 const TableToolbar = ({
   handleGlobalSearch,
@@ -22,17 +23,29 @@ const TableToolbar = ({
     });
   }, [size]);
 
+  const buttonClasses = React.useMemo(() => {
+    return clsx({
+      "p-button-sm": size === "small",
+      "": size === "normal",
+      "p-button-lg ": size === "large",
+    });
+  }, [size]);
+
   return (
     <div className="p-datatable-header">
       <span className="p-input-icon-left">
         <i className="pi pi-search" />
         <InputText
-          className={`${inputClasses}`}
+          className={inputClasses}
           placeholder={globalFilterPlaceholder ?? "Keyword Search"}
           value={value ?? ""}
           onChange={(event) => handleGlobalSearch(event)}
         />
       </span>
+      <div className='p-datatable-header-button-group'>
+        <Button className={buttonClasses} icon="pi pi-trash" label="Delete" severity="danger" />
+        <Button className={buttonClasses} icon="pi pi-plus" label="New" />
+      </div>
     </div>
   );
 };
