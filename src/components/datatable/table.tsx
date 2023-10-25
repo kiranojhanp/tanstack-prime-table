@@ -15,11 +15,13 @@ import {
 } from "@/components/datatable/helpers";
 
 interface DataTableProps<TData, TValue> {
+  className: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
 const DataTable = <TData extends { id: string | number }, TValue>({
+  className,
   columns,
   data,
 }: DataTableProps<TData, TValue>) => {
@@ -29,7 +31,9 @@ const DataTable = <TData extends { id: string | number }, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <div className="p-datatable p-component p-datatable-responsive-scroll">
+    <div
+      className={`p-datatable p-component p-datatable-responsive-scroll ${className}`}
+    >
       <Table>
         <TableHeader className="p-datatable-thead">
           {table.getHeaderGroups().map((headerGroup) => (

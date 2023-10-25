@@ -1,20 +1,20 @@
-table .column-status {
+.table-payments .column-status {
   width: 10rem;
   min-width: 10rem;
   max-width: 10rem;
 }
 
-table .column-email {
+.table-payments .column-email {
   min-width: 20rem;
 }
 
-table .column-amount {
+.table-payments .column-amount {
   width: 10rem;
   min-width: 10rem;
   max-width: 10rem;
 }
 
-table .column-actions {
+.table-payments .column-actions {
   width: 10rem;
   min-width: 10rem;
   max-width: 10rem;
