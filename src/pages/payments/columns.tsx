@@ -1,8 +1,24 @@
 import { ColumnDef } from "@tanstack/react-table";
-import type { Payment } from "@/data";
+import type { Payment, StatusType } from "@/data";
 import { ActionsMenu } from "@/components/datatable/actions";
 import { Checkbox } from "primereact/checkbox";
 import ColumnHeader from "@/components/datatable/column-header";
+import { Tag } from "primereact/tag";
+
+const getSeverity = (status: StatusType) => {
+  switch (status) {
+    case "pending":
+      return "warning";
+    case "processing":
+      return "info";
+    case "success":
+      return "success";
+    case "failed":
+      return "danger";
+    default:
+      return null;
+  }
+};
 
 // TODO: logic to hide delete button when no select options in table
 export const columns: ColumnDef<Payment>[] = [
@@ -28,6 +44,10 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => <ColumnHeader column={column} title="Status" />,
+    cell: ({ row }) => {
+      const status = row.original.status;
+      return <Tag value={status} severity={getSeverity(status)} />;
+    },
   },
   {
     accessorKey: "email",
