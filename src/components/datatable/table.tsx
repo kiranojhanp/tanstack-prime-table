@@ -85,6 +85,14 @@ const DataTable = <TData extends { id: string | number }, TValue>({
     });
   }, [size]);
 
+  const inputClasses = useMemo(() => {
+    return clsx({
+      "p-inputtext-sm": size === "small",
+      "": size === "normal",
+      "p-inputtext-lg ": size === "large",
+    });
+  }, [size]);
+
   return (
     <div className="card">
       <div className={`${tableClasses} ${className}`}>
@@ -92,6 +100,7 @@ const DataTable = <TData extends { id: string | number }, TValue>({
           <span className="p-input-icon-left">
             <i className="pi pi-search" />
             <InputText
+              className={`${inputClasses}`}
               placeholder={globalFilterPlaceholder ?? "Keyword Search"}
               value={
                 (table.getColumn("email")?.getFilterValue() as string) ?? ""
