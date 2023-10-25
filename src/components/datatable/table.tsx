@@ -28,12 +28,14 @@ interface DataTableProps<TData, TValue> {
   className: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  globalFilterPlaceholder?: string;
 }
 
 const DataTable = <TData extends { id: string | number }, TValue>({
   className,
   columns,
   data,
+  globalFilterPlaceholder,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -62,7 +64,7 @@ const DataTable = <TData extends { id: string | number }, TValue>({
             <span className="p-input-icon-left">
               <i className="pi pi-search" />
               <InputText
-                placeholder="Keyword Search"
+                placeholder={globalFilterPlaceholder ?? "Keyword Search"}
                 value={
                   (table.getColumn("email")?.getFilterValue() as string) ?? ""
                 }
