@@ -21,8 +21,7 @@ import {
 } from "@/components/datatable/helpers";
 
 import { Button } from "../ui/button";
-import { useState } from "react";
-import { Card } from "primereact/card";
+import { useMemo, useState } from "react";
 import { InputText } from "primereact/inputtext";
 
 import {
@@ -31,6 +30,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import clsx from "clsx";
 
 interface DataTableProps<TData, TValue> {
   className: string;
@@ -75,11 +75,19 @@ const DataTable = <TData extends { id: string | number }, TValue>({
       rowSelection,
     },
   });
+
+  const tableClasses = useMemo(() => {
+    return clsx({
+      "p-datatable p-component p-datatable-responsive-scroll": true,
+      "p-datatable-sm": size === "small",
+      "": size === "normal",
+      "p-datatable-lg": size === "large",
+    });
+  }, [size]);
+
   return (
     <div className="card">
-      <div
-        className={`p-datatable p-component p-datatable-responsive-scroll ${className}`}
-      >
+      <div className={`${tableClasses} ${className}`}>
         <div className="p-datatable-header">
           <span className="p-input-icon-left">
             <i className="pi pi-search" />
