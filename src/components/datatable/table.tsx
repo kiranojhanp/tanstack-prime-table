@@ -24,12 +24,6 @@ import { Button } from "../ui/button";
 import { useMemo, useState } from "react";
 import { InputText } from "primereact/inputtext";
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import clsx from "clsx";
 
 interface DataTableProps<TData, TValue> {
@@ -40,7 +34,6 @@ interface DataTableProps<TData, TValue> {
   size?: "small" | "normal" | "large";
 }
 
-// Multi size datatable
 // Dropdown using primereact
 // Custom paginator based on primereact paginator component
 // Dropdown component based on primereact using prime react classes
@@ -110,34 +103,6 @@ const DataTable = <TData extends { id: string | number }, TValue>({
               }
             />
           </span>
-
-          {/* TODO: create primereact based dropdown menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
 
         <Table>
