@@ -56,7 +56,7 @@ const TableToolbar = ({
             console.log(mappedSelectedRows);
           }}
         />
-        <Button className={buttonClasses} icon="pi pi-plus" label="New" />
+        <Button className={buttonClasses} icon="pi pi-plus" label="Add new" />
       </div>
     </div>
   );
