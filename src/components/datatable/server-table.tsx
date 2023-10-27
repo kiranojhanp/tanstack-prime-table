@@ -84,7 +84,7 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
     pageSize: ROWS_PER_PAGE[0],
   });
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: [BASE_TAG, { ...pagination }],
     queryFn: async (queryKey) =>
       await fetcherFn({
@@ -149,7 +149,6 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
     []
   );
 
-  if (isLoading || isError) return null;
   return (
     <div className="card">
       <div className={`${tableClasses} ${className}`}>
@@ -205,7 +204,17 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length}>Loading data...</TableCell>
+              </TableRow>
+            ) : isError ? (
+              <TableRow>
+                <TableCell colSpan={columns.length}>
+                  Some error occurred {error.message}
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
