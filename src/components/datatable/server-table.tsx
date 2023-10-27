@@ -40,7 +40,12 @@ export type SizeType = "small" | "normal" | "large";
 interface DataTableProps<TData, TValue> {
   className: string;
   columns: ColumnDef<TData, TValue>[];
-  globalFilterPlaceholder?: string;
+  options: {
+    globalFilterOptions: {
+      id: string;
+      placeholder?: string;
+    };
+  };
   size?: SizeType;
 }
 
@@ -49,19 +54,16 @@ interface DataTableProps<TData, TValue> {
 const INITIAL_PAGE_INDEX = 0;
 const ROWS_PER_PAGE = [10, 20, 30];
 const BASE_TAG = "users";
-const BASE_URL = "https://jsonplaceholder.typicode.com/users";
+const BASE_URL = "https://api.fake-rest.refine.dev/users";
 
-const fetcherFn = async ({
-  fetchDataOptions: { pageIndex, pageSize },
-  url,
-}: {
-  fetchDataOptions: { pageIndex: number; pageSize: number };
-  url: string;
-}) => {
-  const endpointUrl = new URL(url);
-  endpointUrl.searchParams.set("_page", (pageIndex + 1).toString());
-  endpointUrl.searchParams.set("_limit", pageSize.toString());
-  const response = await axios.get(endpointUrl.toString());
+const fetcherFn = async ({ queryKey, url }: { queryKey: any; url: string }) => {
+  const params = queryKey.queryKey[1];
+  const response = await axios.get(url, {
+    params: {
+      _page: params.pageIndex + 1,
+      _limit: params.pageSize,
+    },
+  });
   const data = await response.data;
   const count = (await response.headers["x-total-count"]) as number;
   return { data, count };
@@ -70,7 +72,7 @@ const fetcherFn = async ({
 const ServerDataTable = <TData extends { id: string | number }, TValue>({
   className,
   columns,
-  globalFilterPlaceholder,
+  options: { globalFilterOptions },
   size = "normal",
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -84,20 +86,15 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [BASE_TAG, { ...pagination }],
-    queryFn: async () =>
+    queryFn: async (queryKey) =>
       await fetcherFn({
         url: BASE_URL,
-        fetchDataOptions: { ...pagination },
+        queryKey,
       }),
-    placeholderData: (previousData) => previousData,
   });
 
-  if (!isLoading && !isError) {
-    console.log({ data, isLoading, isError });
-  }
-
   const table = useReactTable({
-    data: data?.data,
+    data: data?.data ?? [],
     columns,
     debugTable: true,
     manualPagination: true,
@@ -110,7 +107,7 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
     onPaginationChange: setPagination,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
-    pageCount: data?.data?.pageCount ?? -1,
+    pageCount: data?.count ?? -1,
     state: {
       columnFilters,
       columnVisibility,
@@ -126,7 +123,9 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
 
   const handleGlobalSearch = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      table.getColumn("email")?.setFilterValue(event.target.value);
+      table
+        .getColumn(globalFilterOptions.id)
+        ?.setFilterValue(event.target.value);
     },
     [table]
   );
@@ -150,16 +149,19 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
     []
   );
 
+  if (isLoading || isError) return null;
   return (
     <div className="card">
       <div className={`${tableClasses} ${className}`}>
         <TableToolbar
           {...{
             handleGlobalSearch,
-            globalFilterPlaceholder,
+            globalFilterPlaceholder: globalFilterOptions.placeholder ?? "",
             mappedSelectedRows,
             size,
-            value: table.getColumn("email")?.getFilterValue() as string,
+            value: table
+              .getColumn(globalFilterOptions.id)
+              ?.getFilterValue() as string,
           }}
         />
         <Table>
@@ -238,7 +240,9 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
           <Paginator
             first={pagination.pageIndex * pagination.pageSize}
             rows={pagination.pageSize}
-            totalRecords={table.getFilteredRowModel().rows?.length}
+            totalRecords={
+              data?.count ?? table.getFilteredRowModel().rows?.length
+            }
             rowsPerPageOptions={ROWS_PER_PAGE}
             onPageChange={(event) => {
               const currentPageIndex = Math.ceil(event.first / event.rows);

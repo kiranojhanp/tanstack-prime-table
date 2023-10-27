@@ -5,25 +5,10 @@ import ColumnHeader from "@/components/datatable/column-header";
 
 type User = {
   id: string;
-  name: string;
-  username: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
+  firstName: string;
+  lastName: string;
+  email: string;
+  status: boolean;
 };
 
 // TODO: logic to hide delete button when no select options in table
@@ -48,16 +33,16 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: ({ column }) => <ColumnHeader column={column} title="Name" />,
+    accessorKey: "firstName",
+    header: ({ column }) => <ColumnHeader column={column} title="First name" />,
   },
   {
-    accessorKey: "username",
-    header: ({ column }) => <ColumnHeader column={column} title="Username" />,
+    accessorKey: "lastName",
+    header: ({ column }) => <ColumnHeader column={column} title="Last name" />,
   },
   {
-    accessorKey: "website",
-    header: ({ column }) => <ColumnHeader column={column} title="Website" />,
+    accessorKey: "email",
+    header: ({ column }) => <ColumnHeader column={column} title="Email" />,
   },
   {
     id: "actions",

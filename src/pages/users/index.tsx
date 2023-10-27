@@ -7,8 +7,13 @@ export default function Users() {
       <ServerDataTable
         className="table-users"
         columns={columns}
-        globalFilterPlaceholder="Search email"
         size="small"
+        options={{
+          globalFilterOptions: {
+            placeholder: "Search email",
+            id: "email",
+          },
+        }}
       />
     </div>
   );
