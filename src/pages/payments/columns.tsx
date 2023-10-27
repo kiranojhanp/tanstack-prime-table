@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import type { Payment, StatusType } from "@/data";
-import { ActionsMenu } from "@/components/datatable/actions";
+import { ActionsMenu } from "@/components/actions";
 import { Checkbox } from "primereact/checkbox";
 import ColumnHeader from "@/components/datatable/column-header";
 import { Tag } from "primereact/tag";

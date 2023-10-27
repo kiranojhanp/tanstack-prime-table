@@ -1,8 +1,8 @@
 import { ButtonProps } from "primereact/button";
 import { MenuItem } from "primereact/menuitem";
 import { useState } from "react";
-import { Menu } from "../menu";
-import { ConfirmationModal } from "../confirmation-modal";
+import { Menu } from "./menu";
+import { ConfirmationModal } from "./confirmation-modal";
 
 export interface ActionsMenuProperties {
   actions?: MenuItem[];
