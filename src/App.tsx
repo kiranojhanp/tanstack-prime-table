@@ -1,9 +1,9 @@
-import Payments from "./pages/payments";
+import Users from "./pages/users";
 
 function App() {
   return (
     <>
-      <Payments />
+      <Users />
     </>
   );
 }
