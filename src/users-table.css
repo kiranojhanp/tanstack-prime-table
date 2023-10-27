@@ -1,0 +1,27 @@
+.table-users .column-select {
+  width: 2rem;
+  min-width: 2rem;
+  max-width: 2rem;
+}
+
+.table-users .column-firstName {
+  width: 10rem;
+  min-width: 10rem;
+  max-width: 10rem;
+}
+
+.table-users .column-email {
+  min-width: 20rem;
+}
+
+.table-users .column-lastName {
+  width: 10rem;
+  min-width: 10rem;
+  max-width: 10rem;
+}
+
+.table-users .column-actions {
+  width: 5rem;
+  min-width: 5rem;
+  max-width: 5rem;
+}
