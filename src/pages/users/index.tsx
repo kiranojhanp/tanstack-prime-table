@@ -5,6 +5,7 @@ export default function Users() {
   return (
     <div className="container mx-auto py-10">
       <ServerDataTable
+        baseUrl="https://api.fake-rest.refine.dev/users"
         className="table-users"
         columns={columns}
         size="small"

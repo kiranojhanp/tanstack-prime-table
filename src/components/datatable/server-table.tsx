@@ -12,8 +12,6 @@ import {
   PaginationState,
 } from "@tanstack/react-table";
 
-import axios from "axios";
-
 import {
   Table,
   TableBody,
@@ -35,9 +33,11 @@ import {
 import clsx from "clsx";
 import { Paginator } from "primereact/paginator";
 import { useQuery } from "@tanstack/react-query";
+import { fetcher } from "./utils";
 
 export type SizeType = "small" | "normal" | "large";
 interface DataTableProps<TData, TValue> {
+  baseUrl: string;
   className: string;
   columns: ColumnDef<TData, TValue>[];
   options: {
@@ -46,34 +46,26 @@ interface DataTableProps<TData, TValue> {
       placeholder?: string;
     };
   };
+  fetcher?: () => Promise<{
+    data: TData[];
+    count: number;
+  }>;
   size?: SizeType;
+  tableName?: string;
 }
 
 // Dropdown using primereact
 // Dropdown component based on primereact using prime react classes
 const INITIAL_PAGE_INDEX = 0;
 const ROWS_PER_PAGE = [10, 20, 30];
-const BASE_TAG = "users";
-const BASE_URL = "https://api.fake-rest.refine.dev/users";
-
-const fetcherFn = async ({ queryKey, url }: { queryKey: any; url: string }) => {
-  const params = queryKey.queryKey[1];
-  const response = await axios.get(url, {
-    params: {
-      _page: params.pageIndex + 1,
-      _limit: params.pageSize,
-    },
-  });
-  const data = await response.data;
-  const count = (await response.headers["x-total-count"]) as number;
-  return { data, count };
-};
 
 const ServerDataTable = <TData extends { id: string | number }, TValue>({
+  baseUrl,
   className,
   columns,
   options: { globalFilterOptions },
   size = "normal",
+  tableName = className,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -85,11 +77,11 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
   });
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: [BASE_TAG, { ...pagination }],
-    queryFn: async (queryKey) =>
-      await fetcherFn({
-        url: BASE_URL,
+    queryKey: [tableName, { ...pagination, sorting }],
+    queryFn: async ({ queryKey }) =>
+      await fetcher({
         queryKey,
+        url: baseUrl,
       }),
   });
 
