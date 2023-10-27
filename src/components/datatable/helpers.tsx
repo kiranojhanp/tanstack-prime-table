@@ -9,7 +9,6 @@ const TableToolbar = ({
   globalFilterPlaceholder,
   mappedSelectedRows,
   size,
-  value,
 }: {
   handleGlobalSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
   globalFilterPlaceholder?: string;
@@ -40,7 +39,6 @@ const TableToolbar = ({
         <InputText
           className={inputClasses}
           placeholder={globalFilterPlaceholder ?? "Keyword Search"}
-          value={value ?? ""}
           onChange={(event) => handleGlobalSearch(event)}
         />
       </span>

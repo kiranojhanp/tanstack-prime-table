@@ -28,6 +28,9 @@ dependencies:
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
+  lodash.debounce:
+    specifier: ^4.0.8
+    version: 4.0.8
   lucide-react:
     specifier: ^0.288.0
     version: 0.288.0(react@18.2.0)
@@ -51,6 +54,9 @@ dependencies:
     version: 1.0.7(tailwindcss@3.3.4)
 
 devDependencies:
+  '@types/lodash.debounce':
+    specifier: ^4.0.8
+    version: 4.0.8
   '@types/node':
     specifier: ^20.8.8
     version: 20.8.8
@@ -1221,6 +1227,16 @@ packages:
     resolution: {integrity: sha512-U3PUjAudAdJBeC2pgN8uTIKgxrb4nlDF3SF0++EldXQvQBGkpFZMSnwQiIoDU77tv45VgNkl/L4ouD+rEomujw==}
     dev: true
 
+  /@types/lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-REumepIJjQFSOaBUoj81U5ZzF9YIhovzE2Lm6ejUbycmwx597k2ivG1cVfPtAj4eVuSbGoZDkJR0sRIahsE6/Q==}
+    dependencies:
+      '@types/lodash': 4.14.200
+    dev: true
+
+  /@types/lodash@4.14.200:
+    resolution: {integrity: sha512-YI/M/4HRImtNf3pJgbF+W6FrXovqj+T+/HpENLTooK9PnkacBsDpeP3IpHab40CClUfhNmdM2WTNP2sa2dni5Q==}
+    dev: true
+
   /@types/node@20.8.8:
     resolution: {integrity: sha512-YRsdVxq6OaLfmR9Hy816IMp33xOBjfyOgUd77ehqg96CFywxAPbDbXvAsuN2KVg2HOT8Eh6uAfU+l4WffwPVrQ==}
     dependencies:
@@ -2189,6 +2205,10 @@ packages:
     dependencies:
       p-locate: 5.0.0
     dev: true
+
+  /lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: false
 
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}

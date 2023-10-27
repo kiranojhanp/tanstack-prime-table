@@ -1,10 +1,11 @@
 import axios from "axios";
-import type { SortingState } from "@tanstack/react-table";
+import type { ColumnFiltersState, SortingState } from "@tanstack/react-table";
 
 interface FetcherProps {
   queryKey: (
     | string
     | {
+        columnFilters: ColumnFiltersState;
         sorting: SortingState;
         pageIndex: number;
         pageSize: number;
@@ -18,11 +19,18 @@ const fetcher = async ({ queryKey, url }: FetcherProps) => {
   const keyWithParams = queryKey[1];
 
   if (typeof keyWithParams !== "string") {
-    const { pageIndex, pageSize, sorting } = keyWithParams;
+    const { columnFilters, pageIndex, pageSize, sorting } = keyWithParams;
 
     // append pagination params
     baseUrl.searchParams.append("_page", (pageIndex + 1).toString());
     baseUrl.searchParams.append("_limit", pageSize.toString());
+
+    // append filter params
+    for (const columnFilter of columnFilters) {
+      const { id } = columnFilter;
+      const value = columnFilter.value as any;
+      baseUrl.searchParams.append(id, value.toString());
+    }
 
     // append sorting params
     for (const sort of sorting) {

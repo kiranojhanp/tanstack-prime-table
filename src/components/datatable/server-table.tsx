@@ -11,6 +11,7 @@ import {
   VisibilityState,
   PaginationState,
 } from "@tanstack/react-table";
+import debounce from "lodash.debounce";
 
 import {
   Table,
@@ -58,6 +59,7 @@ interface DataTableProps<TData, TValue> {
 // Dropdown component based on primereact using prime react classes
 const INITIAL_PAGE_INDEX = 0;
 const ROWS_PER_PAGE = [10, 20, 30];
+export const DEBOUNCE_TIME_MS = 300;
 
 const ServerDataTable = <TData extends { id: string | number }, TValue>({
   baseUrl,
@@ -77,7 +79,7 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
   });
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: [tableName, { ...pagination, sorting }],
+    queryKey: [tableName, { ...pagination, sorting, columnFilters }],
     queryFn: async ({ queryKey }) =>
       await fetcher({
         queryKey,
@@ -114,11 +116,11 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
     .rows.map((row) => ({ id: row.original.id }));
 
   const handleGlobalSearch = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
+    debounce((event: ChangeEvent<HTMLInputElement>) => {
       table
         .getColumn(globalFilterOptions.id)
         ?.setFilterValue(event.target.value);
-    },
+    }, DEBOUNCE_TIME_MS),
     [table]
   );
 
@@ -150,9 +152,6 @@ const ServerDataTable = <TData extends { id: string | number }, TValue>({
             globalFilterPlaceholder: globalFilterOptions.placeholder ?? "",
             mappedSelectedRows,
             size,
-            value: table
-              .getColumn(globalFilterOptions.id)
-              ?.getFilterValue() as string,
           }}
         />
         <Table>
