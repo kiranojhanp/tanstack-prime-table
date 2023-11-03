@@ -15,7 +15,7 @@ export default function Payments() {
         columns={columns}
         data={data}
         globalFilterPlaceholder="Search email"
-        size="small"
+        // size="small"
       />
     </div>
   );

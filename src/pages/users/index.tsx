@@ -8,7 +8,7 @@ export default function Users() {
         baseUrl="https://api.fake-rest.refine.dev/users"
         className="table-users"
         columns={columns}
-        size="small"
+        // size="small"
         options={{
           globalFilterOptions: {
             placeholder: "Search email",
